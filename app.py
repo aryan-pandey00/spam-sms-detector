@@ -13,16 +13,18 @@ os.makedirs(nltk_data_path, exist_ok=True)
 
 nltk.data.path.append(nltk_data_path)
 
-try:
-    nltk.data.find("tokenizers/punkt")
-except LookupError:
-    nltk.download("punkt", download_dir=nltk_data_path)
+# Ensure required tokenizer + stopwords resources
+required_resources = [
+    ("tokenizers/punkt", "punkt"),
+    ("tokenizers/punkt_tab", "punkt_tab"),
+    ("corpora/stopwords", "stopwords"),
+]
 
-try:
-    nltk.data.find("corpora/stopwords")
-except LookupError:
-    nltk.download("stopwords", download_dir=nltk_data_path)
-
+for path, name in required_resources:
+    try:
+        nltk.data.find(path)
+    except LookupError:
+        nltk.download(name, download_dir=nltk_data_path)
 
 # GLOBAL OBJECTS
 
@@ -69,3 +71,4 @@ if st.button("Predict"):
             st.error("🚨 Message is Spam")
         else:
             st.success("Message is Not Spam")
+
